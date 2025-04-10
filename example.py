@@ -9,7 +9,9 @@ def open_dialog():
 
 
 def save_dialog():
-    dialog = CTkFileDialog(root, title="Save project, please)", save=True)
+    dialog = CTkFileDialog(
+        root, title="Save project, please)", save=True, save_extension=".txt"
+    )
     if dialog.path:
         print(dialog.path)
 

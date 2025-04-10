@@ -30,3 +30,4 @@ if dialog.path:
 | **initialdir** | initial dir |
 | **title** | dialog window title |
 | **save** | `save=False` if open file, `save=True` if save file |
+| **save_extension** | Save extension, for example save_extension=".txt" |

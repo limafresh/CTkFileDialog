@@ -8,7 +8,14 @@ PATH = os.path.dirname(os.path.realpath(__file__))
 
 class CTkFileDialog(ctk.CTkToplevel):
     def __init__(
-        self, parent, width=500, height=400, initialdir=".", title=None, save=False
+        self,
+        parent,
+        width=500,
+        height=400,
+        initialdir=".",
+        title=None,
+        save=False,
+        save_extension="",
     ):
         super().__init__(parent)
         self.geometry(f"{width}x{height}")
@@ -17,6 +24,7 @@ class CTkFileDialog(ctk.CTkToplevel):
             "Save file" if save else "Open file"
         ) if title is None else self.title(title)
         self.save_mode = save
+        self.save_extension = save_extension
 
         self.path = None
 
@@ -36,6 +44,12 @@ class CTkFileDialog(ctk.CTkToplevel):
             self.path_frame, text="↑", width=30, command=self._up
         )
         self.up_btn.pack(side=ctk.RIGHT, padx=10, pady=10)
+
+        if save_extension:
+            extension_btn = ctk.CTkButton(
+                self.path_frame, text=save_extension, width=50, hover=False
+            )
+            extension_btn.pack(side=ctk.RIGHT, padx=10, pady=10)
 
         btn_frame = ctk.CTkFrame(self)
         btn_frame.pack(side=ctk.BOTTOM, fill=ctk.X, padx=10, pady=10)
@@ -70,6 +84,8 @@ class CTkFileDialog(ctk.CTkToplevel):
         self.tree.bind("<Double-1>", self._on_click)
 
         self._populate_file_list()
+
+        self.grab_set()
         self.wait_window()
 
     def _populate_file_list(self, event=None):
@@ -106,10 +122,9 @@ class CTkFileDialog(ctk.CTkToplevel):
                 self.path = selected_path
                 self.destroy()
 
-    def _ok_save(self):
-        filename = self.save_entry.get()
-        selected_path = os.path.join(self.initialdir, filename)
-        self.path = selected_path
+    def _ok_save(self, event=None):
+        selected_path = os.path.join(self.initialdir, self.save_entry.get())
+        self.path = selected_path + self.save_extension
         self.destroy()
 
     def _up(self):
