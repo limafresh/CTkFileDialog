@@ -35,9 +35,11 @@ class CTkFileDialog(ctk.CTkToplevel):
         self.path_frame = ctk.CTkFrame(self)
         self.path_frame.pack(fill=ctk.X, padx=10, pady=10)
 
-        self.path_entry = ctk.CTkEntry(self.path_frame)
+        self.initialdir = ctk.StringVar(
+            value=os.path.join(os.path.abspath(initialdir), "")
+        )
+        self.path_entry = ctk.CTkEntry(self.path_frame, textvariable=self.initialdir)
         self.path_entry.pack(expand=True, fill=ctk.X, side=ctk.LEFT, padx=10, pady=10)
-        self.path_entry.insert(ctk.END, os.path.join(os.path.abspath(initialdir), ""))
         self.path_entry.bind("<Return>", self._populate_file_list)
 
         self.up_btn = ctk.CTkButton(
@@ -73,7 +75,7 @@ class CTkFileDialog(ctk.CTkToplevel):
             self.save_entry.pack(side=ctk.BOTTOM, fill=ctk.X, padx=10)
 
         self.tree_frame = ctk.CTkFrame(self)
-        self.tree_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
+        self.tree_frame.pack(fill=ctk.BOTH, expand=True, padx=10, pady=5)
 
         style = ttk.Style()
         style.configure("Treeview", rowheight=30)
@@ -89,15 +91,13 @@ class CTkFileDialog(ctk.CTkToplevel):
         self.wait_window()
 
     def _populate_file_list(self, event=None):
-        if self.path_entry.get() == "":
-            self.path_entry.insert(ctk.END, os.path.join(os.path.abspath("."), ""))
-        self.initialdir = self.path_entry.get()
+        if self.initialdir.get() == "":
+            self.initialdir.set(os.path.join(os.path.abspath("."), ""))
         try:
             for item in self.tree.get_children():
                 self.tree.delete(item)
-            for item in os.listdir(self.initialdir):
-                full_path = os.path.join(self.initialdir, item)
-                if os.path.isdir(full_path):
+            for item in os.listdir(self.initialdir.get()):
+                if os.path.isdir(os.path.join(self.initialdir.get(), item)):
                     self.tree.insert("", tk.END, text=item, image=self.folder_image)
                 else:
                     self.tree.insert("", tk.END, text=item, image=self.file_image)
@@ -110,12 +110,10 @@ class CTkFileDialog(ctk.CTkToplevel):
             return
 
         selected_name = self.tree.item(selected_item)["text"]
-        selected_path = os.path.join(self.initialdir, selected_name)
+        selected_path = os.path.join(self.initialdir.get(), selected_name)
 
         if os.path.isdir(selected_path):
-            self.initialdir = selected_path
-            self.path_entry.delete(0, ctk.END)
-            self.path_entry.insert(ctk.END, self.initialdir)
+            self.initialdir.set(os.path.join(os.path.abspath(selected_path), ""))
             self._populate_file_list()
         else:
             if not self.save_mode:
@@ -123,13 +121,17 @@ class CTkFileDialog(ctk.CTkToplevel):
                 self.destroy()
 
     def _ok_save(self, event=None):
-        selected_path = os.path.join(self.initialdir, self.save_entry.get())
+        if (
+            self.save_entry.get() == ""
+            or self.save_entry.get().startswith(" ")
+            or self.save_entry.get().endswith(" ")
+        ):
+            return
+        selected_path = os.path.join(self.initialdir.get(), self.save_entry.get())
         self.path = selected_path + self.save_extension
         self.destroy()
 
     def _up(self):
-        current_path = os.path.normpath(self.path_entry.get())
-        new_path = os.path.join(os.path.dirname(current_path), "")
-        self.path_entry.delete(0, ctk.END)
-        self.path_entry.insert(ctk.END, new_path)
+        current_path = os.path.normpath(self.initialdir.get())
+        self.initialdir.set(os.path.join(os.path.dirname(current_path), ""))
         self._populate_file_list()
