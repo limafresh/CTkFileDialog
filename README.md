@@ -25,9 +25,13 @@ if dialog.path:
 ## Arguments
 | Argument | Description |
 | ---------------- | ------------ |
+| **master** | master, required |
 | **width** | dialog window width |
 | **height** | dialog window height |
 | **initialdir** | initial dir |
 | **title** | dialog window title |
-| **save** | `save=False` if open file, `save=True` if save file |
-| **save_extension** | Save extension, for example save_extension=".txt" |
+| **save** | `save=False` if open file (by default), `save=True` if save file |
+| **save_extension** | Save extension, for example, `save_extension=".txt"` |
+
+## Projects using CTkFileDialog
+- [Brushshe](https://github.com/limafresh/Brushshe): fully functional painting app written in CustomTkinter
