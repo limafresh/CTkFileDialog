@@ -3,14 +3,14 @@ from CTkFileDialog import CTkFileDialog
 
 
 def open_dialog():
-    dialog = CTkFileDialog(root, title="Open project, please)", save=False)
+    dialog = CTkFileDialog(title="Open project, please", save=False)
     if dialog.path:
         print(dialog.path)
 
 
 def save_dialog():
     dialog = CTkFileDialog(
-        root, title="Save project, please)", save=True, save_extension=".txt"
+        title="Save project, please", save=True, save_extension=".txt"
     )
     if dialog.path:
         print(dialog.path)

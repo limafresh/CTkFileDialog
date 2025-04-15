@@ -4,6 +4,6 @@ Author: limafresh
 Homepage: https://github.com/limafresh/CTkFileDialog
 """
 
-__version__ = "0.1.3"
+__version__ = "0.2"
 
 from .ctk_file_dialog import CTkFileDialog as CTkFileDialog

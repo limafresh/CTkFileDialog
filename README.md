@@ -25,9 +25,9 @@ if dialog.path:
 ## Arguments
 | Argument | Description |
 | ---------------- | ------------ |
-| **master** | master, required |
 | **width** | dialog window width |
 | **height** | dialog window height |
+| **hidden_files** | False (by default) or True |
 | **initialdir** | initial dir |
 | **title** | dialog window title |
 | **save** | `save=False` if open file (by default), `save=True` if save file |
