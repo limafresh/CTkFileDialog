@@ -33,5 +33,23 @@ if dialog.path:
 | **save** | `save=False` if open file (by default), `save=True` if save file |
 | **save_extension** | Save extension, for example, `save_extension=".txt"` |
 
+# CTkFileWidget (new!)
+A widget that can be added to an existing window.
+
+![Screenshot](https://raw.githubusercontent.com/limafresh/CTkFileDialog/main/screenshot3.png)
+
+```python
+def my_command():
+    print(filewidget.path)
+
+filewidget = CTkFileWidget(root, command=my_command)
+filewidget.pack(padx=10, pady=10)
+```
+
+## Arguments
+| **master** | master, required |
+| **command** | the command that will be executed when you click "OK" |
+| **All of CTkFileDialog** | except **title** |
+
 ## Projects using CTkFileDialog
 - [Brushshe](https://github.com/limafresh/Brushshe): fully functional painting app written in CustomTkinter
