@@ -10,14 +10,14 @@ Download and place the CTkFileDialog folder into your script folder.
 
 ### Open file
 ```python
-dialog = CTkFileDialog(root, save=False)
+dialog = CTkFileDialog()
 if dialog.path:
     print(dialog.path)
 ```
 
 ### Save file
 ```python
-dialog = CTkFileDialog(root, save=True)
+dialog = CTkFileDialog(save=True)
 if dialog.path:
     print(dialog.path)
 ```
