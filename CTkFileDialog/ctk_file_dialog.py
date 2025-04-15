@@ -9,20 +9,21 @@ PATH = os.path.dirname(os.path.realpath(__file__))
 class CTkFileDialog(ctk.CTkToplevel):
     def __init__(
         self,
-        parent,
         width=500,
         height=400,
+        hidden_files=False,
         initialdir=".",
         title=None,
         save=False,
         save_extension="",
     ):
-        super().__init__(parent)
+        super().__init__()
         self.geometry(f"{width}x{height}")
 
         self.title(
             "Save file" if save else "Open file"
         ) if title is None else self.title(title)
+        self.hidden_files = hidden_files
         self.save_mode = save
         self.save_extension = save_extension
 
@@ -32,7 +33,10 @@ class CTkFileDialog(ctk.CTkToplevel):
         self.folder_image = tk.PhotoImage(file=os.path.join(PATH, "folder.png"))
         self.file_image = tk.PhotoImage(file=os.path.join(PATH, "file.png"))
 
-        self.path_frame = ctk.CTkFrame(self)
+        self.frame = ctk.CTkFrame(self)
+        self.frame.pack(fill=ctk.BOTH, expand=True)
+
+        self.path_frame = ctk.CTkFrame(self.frame)
         self.path_frame.pack(fill=ctk.X, padx=10, pady=10)
 
         self.initialdir = ctk.StringVar(
@@ -53,7 +57,7 @@ class CTkFileDialog(ctk.CTkToplevel):
             )
             extension_btn.pack(side=ctk.RIGHT, padx=10, pady=10)
 
-        btn_frame = ctk.CTkFrame(self)
+        btn_frame = ctk.CTkFrame(self.frame)
         btn_frame.pack(side=ctk.BOTTOM, fill=ctk.X, padx=10, pady=10)
 
         ok_btn = ctk.CTkButton(btn_frame, text="OK")
@@ -70,11 +74,11 @@ class CTkFileDialog(ctk.CTkToplevel):
 
         if self.save_mode:
             self.save_entry = ctk.CTkEntry(
-                self, placeholder_text="Enter name for save..."
+                self.frame, placeholder_text="Enter name for save..."
             )
             self.save_entry.pack(side=ctk.BOTTOM, fill=ctk.X, padx=10)
 
-        self.tree_frame = ctk.CTkFrame(self)
+        self.tree_frame = ctk.CTkFrame(self.frame)
         self.tree_frame.pack(fill=ctk.BOTH, expand=True, padx=10, pady=5)
 
         style = ttk.Style()
@@ -86,6 +90,7 @@ class CTkFileDialog(ctk.CTkToplevel):
 
         self._populate_file_list()
 
+        self.wait_visibility()
         self.grab_set()
         self.wait_window()
 
@@ -95,11 +100,13 @@ class CTkFileDialog(ctk.CTkToplevel):
         try:
             for item in self.tree.get_children():
                 self.tree.delete(item)
-            for item in os.listdir(self.initialdir.get()):
-                if os.path.isdir(os.path.join(self.initialdir.get(), item)):
-                    self.tree.insert("", tk.END, text=item, image=self.folder_image)
-                else:
-                    self.tree.insert("", tk.END, text=item, image=self.file_image)
+            items = sorted(os.listdir(self.initialdir.get()))
+            for item in items:
+                if not item.startswith(".") or self.hidden_files:
+                    if os.path.isdir(os.path.join(self.initialdir.get(), item)):
+                        self.tree.insert("", tk.END, text=item, image=self.folder_image)
+                    else:
+                        self.tree.insert("", tk.END, text=item, image=self.file_image)
         except Exception:
             pass
 
@@ -134,3 +141,8 @@ class CTkFileDialog(ctk.CTkToplevel):
         current_path = os.path.normpath(self.initialdir.get())
         self.initialdir.set(os.path.join(os.path.dirname(current_path), ""))
         self._populate_file_list()
+
+
+if __name__ == "__main__":
+    app = CTkFileDialog()
+    app.mainloop()
