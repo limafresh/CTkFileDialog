@@ -47,6 +47,8 @@ filewidget.pack(padx=10, pady=10)
 ```
 
 ## Arguments
+| Argument | Description |
+| ---------------- | ------------ |
 | **master** | master, required |
 | **command** | the command that will be executed when you click "OK" |
 | **All of CTkFileDialog** | except **title** |
