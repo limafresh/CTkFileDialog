@@ -16,6 +16,7 @@ class CTkFileWidget(ctk.CTkFrame):
         initialdir=".",
         save=False,
         save_extension="",
+        open_folder=False,
         command=None,
     ):
         super().__init__(master, width=width, height=height)
@@ -24,6 +25,7 @@ class CTkFileWidget(ctk.CTkFrame):
         self.hidden_files = hidden_files
         self.save_mode = save
         self.save_extension = save_extension
+        self.open_folder = open_folder
         self.command = command
 
         self.path = None
@@ -61,6 +63,8 @@ class CTkFileWidget(ctk.CTkFrame):
 
         if self.save_mode:
             ok_btn.configure(command=self._ok_save)
+        elif self.open_folder:
+            ok_btn.configure(command=self._ok_folder)
         else:
             ok_btn.configure(command=self._on_click)
 
@@ -114,6 +118,11 @@ class CTkFileWidget(ctk.CTkFrame):
                 self.path = selected_path
                 if self.command is not None:
                     self.command()
+
+    def _ok_folder(self, event=None):
+        self.path = self.initialdir.get()
+        if self.command is not None:
+            self.command()
 
     def _ok_save(self, event=None):
         if (
