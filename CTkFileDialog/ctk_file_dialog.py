@@ -16,16 +16,26 @@ class CTkFileDialog(ctk.CTkToplevel):
         title=None,
         save=False,
         save_extension="",
+        open_folder=False,
     ):
         super().__init__()
         self.geometry(f"{width}x{height}")
 
-        self.title(
-            "Save file" if save else "Open file"
-        ) if title is None else self.title(title)
+        if title is None:
+            if save:
+                self.title("Save file")
+            elif open_folder:
+                self.title("Open folder")
+            else:
+                self.title("Open file")
+        else:
+            self.title(title)
+
         self.hidden_files = hidden_files
+
         self.save_mode = save
         self.save_extension = save_extension
+        self.open_folder = open_folder
 
         self.path = None
 
@@ -65,6 +75,8 @@ class CTkFileDialog(ctk.CTkToplevel):
 
         if self.save_mode:
             ok_btn.configure(command=self._ok_save)
+        elif self.open_folder:
+            ok_btn.configure(command=self._ok_folder)
         else:
             ok_btn.configure(command=self._on_click)
 
@@ -125,6 +137,10 @@ class CTkFileDialog(ctk.CTkToplevel):
             if not self.save_mode:
                 self.path = selected_path
                 self.destroy()
+
+    def _ok_folder(self, event=None):
+        self.path = self.initialdir.get()
+        self.destroy()
 
     def _ok_save(self, event=None):
         if (
