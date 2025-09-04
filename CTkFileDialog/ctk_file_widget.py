@@ -18,6 +18,14 @@ class CTkFileWidget(ctk.CTkFrame):
         save_extension="",
         open_folder=False,
         command=None,
+        button_color=None,
+        btn_hover_color=None,
+        button_radius=None,
+        button_hover=True,
+        button_border=None,
+        btn_border_color=None,
+        btn_text_color=None,
+        ok_text="OK",
     ):
         super().__init__(master, width=width, height=height)
         self.pack_propagate(False)
@@ -58,8 +66,26 @@ class CTkFileWidget(ctk.CTkFrame):
         btn_frame = ctk.CTkFrame(self)
         btn_frame.pack(side=ctk.BOTTOM, fill=ctk.X, padx=10, pady=10)
 
-        ok_btn = ctk.CTkButton(btn_frame, text="OK")
+        ok_btn = ctk.CTkButton(btn_frame, text=ok_text)
         ok_btn.pack(side=ctk.RIGHT)
+
+        buttons = [self.up_btn, ok_btn]
+
+        for button in buttons:
+            button.configure(hover=button_hover)
+
+            if button_color is not None:
+                button.configure(fg_color=button_color)
+            if btn_hover_color is not None:
+                button.configure(hover_color=btn_hover_color)
+            if button_radius is not None:
+                button.configure(corner_radius=button_radius)
+            if button_border is not None:
+                button.configure(border_width=button_border)
+            if btn_border_color is not None:
+                button.configure(border_color=btn_border_color)
+            if btn_text_color is not None:
+                button.configure(text_color=btn_text_color)
 
         if self.save_mode:
             ok_btn.configure(command=self._ok_save)
@@ -78,7 +104,16 @@ class CTkFileWidget(ctk.CTkFrame):
         self.tree_frame.pack(fill=ctk.BOTH, expand=True, padx=10, pady=5)
 
         style = ttk.Style()
+        style.theme_use("clam")
         style.configure("Treeview", rowheight=30)
+
+        if ctk.get_appearance_mode() == "Dark":
+            style.configure(
+                "Treeview",
+                background="gray17",
+                fieldbackground="gray17",
+                foreground="#DCE4EE",
+            )
 
         self.tree = ttk.Treeview(self.tree_frame, show="tree")
         self.tree.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)

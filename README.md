@@ -8,7 +8,7 @@ Unofficial file dialog for CustomTkinter.
 ![Screenshot](https://raw.githubusercontent.com/limafresh/CTkFileDialog/main/screenshot3.png)
 
 ## How to use?
-Download and place the CTkFileDialog folder into your script folder.
+Download and place the CTkFileDialog folder (where `__init__.py` is located) into your script folder.
 
 ```python
 import customtkinter as ctk
@@ -61,6 +61,15 @@ root.mainloop()
 | **save** | `save=False` if open file (by default), `save=True` if save file |
 | **save_extension** | Save extension, for example, `save_extension=".txt"` |
 | **open_folder** | if open folder, `True` or `False` |
+| **button_color** | buttons color, for example, `button_color=red` or `button_color=#000000` |
+| **btn_hover_color** | buttons hover color |
+| **button_radius** | buttons radius, int |
+| **button_hover** | `True` or `False` |
+| **button_border** | buttons border width, int |
+| **btn_border_color** | buttons hover color |
+| **btn_text_color** | buttons text color |
+| **ok_text** | "OK" button text, for example, `ok_text="Done"` |
+| **cancel_text** | "Cancel" button text |
 
 # CTkFileWidget (new!)
 A widget that can be added to an existing window.
@@ -80,7 +89,7 @@ filewidget.pack(padx=10, pady=10)
 | ---------------- | ------------ |
 | **master** | master, required |
 | **command** | the command that will be executed when you click "OK" |
-| **All of CTkFileDialog** | except **title** |
+| **All of CTkFileDialog** | except **title** and **cancel_text** |
 
 ## Projects using CTkFileDialog
-- [Brushshe](https://github.com/limafresh/Brushshe): fully functional painting app written in CustomTkinter
+- [Brushshe](https://github.com/limafresh/Brushshe) (uses a modified version): fully functional painting app written in CustomTkinter
