@@ -90,6 +90,3 @@ filewidget.pack(padx=10, pady=10)
 | **master** | master, required |
 | **command** | the command that will be executed when you click "OK" |
 | **All of CTkFileDialog** | except **title** and **cancel_text** |
-
-## Projects using CTkFileDialog
-- [Brushshe](https://github.com/limafresh/Brushshe) (uses a modified version): fully functional painting app written in CustomTkinter
